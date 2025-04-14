@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книжный червь | Новости</title>
+    <link rel="stylesheet" href="styles/style_3.css">
+</head>
+<body>
+    <header>
+        <h1>Новости книжного червя</h1>
+    </header>
+    
+    <main>
+        <!-- Форма для добавления новостей -->
+        <form id="addNewsForm">
+            <label for="newsTitle">Заголовок новости:</label><br>
+            <input type="text" id="newsTitle" required><br>
+            
+            <label for="newsContent">Содержание новости:</label><br>
+            <textarea id="newsContent" rows="4" cols="50" required></textarea><br>
+            
+            <button type="submit">Добавить новость</button>
+        </form>
+        
+        <!-- Список новостей -->
+        <div id="newsList"></div>
+    </main>
+    
+    <script src="scripts.js"></script>
+</body>
+</html>

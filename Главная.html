@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книжный червь</title>
+    <link rel="stylesheet" href="/styles/style_1.css">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Courier New, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color:#ffffff
+        }
+
+        header {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #000000;
+            overflow: hidden;
+        }
+
+        nav a {
+            float: left;
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        nav a:hover {
+            background-color: #2e2d5c;
+            color: rgb(255, 255, 255);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search-btn:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        footer a {
+            color: lightblue;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Добро пожаловать в обитель книжного червя!</h1>
+</header>
+
+<nav>
+    <a href="книги.html">Каталог книг</a>
+    <a href="новости.html">Новости</a>
+    <a href="презентации.html">Презентации</a>
+</nav>
+
+<div class="container">
+    <h1>О нашей библиотеке</h1>
+    <p>На этом сайте вы сможете быстро и без проблем найти и скачать книгу из программы СПО.</p>
+
+    <!-- Форма поиска -->
+    <form id="searchForm" class="search-form">
+        <input type="text" id="searchInput" class="search-input" placeholder="Введите название книги...">
+        <button type="submit" class="search-btn">Искать</button>
+    </form>
+
+    <!-- Блок для вывода результатов поиска -->
+    <div id="searchResults"></div>
+</div>
+
+<footer>
+    <p>© 2025 Книжный червь. Все права защищены.</p>
+    <p>
+    </p>
+    <p>
+        <a href="О нас.html" >О нас</a> |
+        <a href="http://www.republiquedesmangues.fr/" style="color:#333" target="_blank">НАЖМИ!</a>
+    </p>
+</footer>
+
+<script>
+    // Функция для отправки запроса на сервер
+    async function searchBooks() {
+        const searchTerm = document.getElementById('searchInput').value;
+
+        if (!searchTerm) return;
+
+        try {
+            const response = await fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: searchTerm })
+            });
+
+            const data = await response.json();
+
+            // Отображение результатов поиска
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(book => {
+                    const bookItem = `
+                        <div class="book-item">
+                            <h3>${book.title}</h3>
+                            <p>Автор: ${book.author}</p>
+                            <p>Год издания: ${book.year}</p>
+                            <p>Жанр: ${book.genre}</p>
+                        </div>
+                    `;
+                    resultsContainer.insertAdjacentHTML('beforeend', bookItem);
+                });
+            } else {
+                resultsContainer.textContent = 'К сожалению, ничего не найдено.';
+            }
+        } catch (error) {
+            console.error('Ошибка при поиске:', error);
+            alert('Произошла ошибка при выполнении поиска.');
+        }
+    }
+
+    // Обработчик события отправки формы
+    document.getElementById('searchForm').addEventListener('submit', event => {
+        event.preventDefault(); // Предотвращаем перезагрузку страницы
+        searchBooks(); // Выполняем поиск
+    });
+</script>
+
+</body>
+</html>
