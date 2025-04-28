@@ -1,116 +1,183 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог книг</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9; /* Светло-серый фон */
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .book-card {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень */
-        }
-
-        .book-info {
-            flex-grow: 1;
-        }
-
-        .book-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .book-author,
-        .book-year,
-        .book-genre {
-            font-size: 14px;
-            color: #000000;
-        }
-
-        .book-button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .book-button:hover {
-            background-color: #45a049;
-        }
-
-        @media screen and (max-width: 768px) {
-            .book-card {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог | Книжный червь</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Courier', Tahoma, sans-serif;
+    }
+    body {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f8f8f8;
+    }
+    h1 {
+      color: #000000;
+      text-align: center;
+    }
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+    .book-card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    .book-card:hover {
+      transform: translateY(-5px);
+    }
+    .book-cover {
+      height: 200px;
+      background: #e1e1e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #555;
+    }
+    .book-info {
+      padding: 15px;
+    }
+    .book-title {
+      font-weight: bold;
+      margin: 0 0 5px 0;
+      color: #222;
+    }
+    .book-author {
+      color: #666;
+      margin: 0 0 10px 0;
+    }
+    .book-year {
+      color: #888;
+      font-size: 14px;
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      margin-top: 40px;
+    }
+    .pagination button {
+      padding: 8px 20px;
+      border: none;
+      background: #4a6fa5;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .pagination button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+    .page-info {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
+  <h1>Каталог книг</h1>
+  
+  <div id="books-container" class="books-grid"></div>
+  
+  <div class="pagination">
+    <button id="prev-btn" disabled>← Назад</button>
+    <span id="page-info" class="page-info">Страница 1</span>
+    <button id="next-btn">Далее →</button>
+  </div>
 
-    <div class="container">
-        <h1>Каталог книг</h1>
+  <script>
+    // Красивые тестовые данные (можно заменить на реальные)
+    const allBooks = [
+      { id: 1, title: "Мастер и Маргарита", author: "Михаил Булгаков", year: 1966 },
+      { id: 2, title: "Преступление и наказание", author: "Фёдор Достоевский", year: 1866 },
+      { id: 3, title: "1984", author: "Джордж Оруэлл", year: 1949 },
+      { id: 4, title: "Тихий Дон", author: "Михаил Шолохов", year: 1928 },
+      { id: 5, title: "Анна Каренина", author: "Лев Толстой", year: 1877 },
+      { id: 6, title: "Война и мир", author: "Лев Толстой", year: 1869 },
+      { id: 7, title: "Гарри Поттер и философский камень", author: "Джоан Роулинг", year: 1997 },
+      { id: 8, title: "Маленький принц", author: "Антуан де Сент-Экзюпери", year: 1943 },
+      { id: 9, title: "Улисс", author: "Джеймс Джойс", year: 1922 },
+      { id: 10, title: "Лолита", author: "Владимир Набоков", year: 1955 },
+      { id: 11, title: "Властелин колец", author: "Дж. Р. Р. Толкин", year: 1954 },
+      { id: 12, title: "Атлант расправил плечи", author: "Айн Рэнд", year: 1957 },
+      { id: 13, title: "Шерлок Холмс", author: "Артур Конан Дойл", year: 1887 },
+      { id: 14, title: "Цветы для Элджернона", author: "Дэниел Киз", year: 1966 },
+      { id: 15, title: "Портрет Дориана Грея", author: "Оскар Уайльд", year: 1890 },
+      { id: 16, title: "Над пропастью во ржи", author: "Джером Сэлинджер", year: 1951},
+      {id: 17, title: "Отцы и Дети", author: "И.Тургенев", year: 1862},
+      {id: 18, title: "Отцы и Дети", author: "И.Тургенев", year: 1862},
+      {id: 19, title: "Отцы и Дети", author: "И.Тургенев", year: 1862}
+    ];
 
-        <!-- Карточка книги -->
+    // Настройки пагинации
+    let currentPage = 1;
+    const booksPerPage = 6;
+
+    // DOM-элементы
+    const booksContainer = document.getElementById('books-container');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const pageInfo = document.getElementById('page-info');
+
+    // Генерация случайного цвета для обложки
+    function getRandomColor() {
+      const colors = ['#FF9AA2', '#FFB7B2', '#FFDAC1', '#E2F0CB', '#B5EAD7', '#C7CEEA'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    // Отрисовка книг
+    function renderBooks() {
+      const start = (currentPage - 1) * booksPerPage;
+      const end = start + booksPerPage;
+      const booksToShow = allBooks.slice(start, end);
+
+      booksContainer.innerHTML = booksToShow.map(book => `
         <div class="book-card">
-            <div class="book-info">
-                <h2 class="book-title">Война и мир</h2>
-                <p class="book-author">Лев Толстой</p>
-                <p class="book-year">1869 г.</p>
-                <p class="book-genre">Эпос</p>
-            </div>
-            <button class="book-button">Подробнее</button>
+          <div class="book-cover" style="background-color: ${getRandomColor()}">
+            ${book.title.split(' ').map(word => word[0]).join('')}
+          </div>
+          <div class="book-info">
+            <h3 class="book-title">${book.title}</h3>
+            <p class="book-author">${book.author}</p>
+            <p class="book-year">${book.year} год</p>
+          </div>
         </div>
+      `).join('');
 
-        <div class="book-card">
-            <div class="book-info">
-                <h2 class="book-title">Мастер и Маргарита</h2>
-                <p class="book-author">Михаил Булгаков</p>
-                <p class="book-year">1967 г.</p>
-                <p class="book-genre">Роман</p>
-            </div>
-            <button class="book-button">Подробнее</button>
-        </div>
+      // Обновляем кнопки и номер страницы
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = end >= allBooks.length;
+      pageInfo.textContent = `Страница ${currentPage} из ${Math.ceil(allBooks.length / booksPerPage)}`;
+    }
 
-    <div class="book-info">
-        <h2 class="book-title">Автостопом по галактике</h2>
-        <p class="book-author">Дуглас Адамс</p>
-        <p class="book-year">1982 г.</p>
-        <p class="book-genre">Роман</p>
-    </div>
-    <button class="book-button">Подробнее</button>
-</div>
+    // Обработчики кнопок
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderBooks();
+      }
+    });
 
+    nextBtn.addEventListener('click', () => {
+      if (currentPage * booksPerPage < allBooks.length) {
+        currentPage++;
+        renderBooks();
+      }
+    });
+
+    // Первая загрузка
+    renderBooks();
+  </script>
 </body>
 </html>

@@ -1,189 +1,374 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Книжный червь</title>
-    <link rel="stylesheet" href="/styles/style_1.css">
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: Courier New, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            color:#ffffff
-        }
-
-        header {
-            background-color: #ffffff;
-            color: rgb(0, 0, 0);
-            padding: 10px;
-            text-align: center;
-        }
-
-        nav {
-            background-color: #000000;
-            overflow: hidden;
-        }
-
-        nav a {
-            float: left;
-            color: rgb(255, 255, 255);
-            text-decoration: none;
-            padding: 14px 16px;
-            text-align: center;
-        }
-
-        nav a:hover {
-            background-color: #2e2d5c;
-            color: rgb(255, 255, 255);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            flex: 1;
-        }
-
-        .search-form {
-            margin-bottom: 20px;
-        }
-
-        .search-input {
-            width: 80%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-
-        .search-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .search-btn:hover {
-            background-color: #45a049;
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        footer a {
-            color: lightblue;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Главная | Книжный червь</title>
+  <style>
+    /* Общие стили */
+    :root {
+      --primary: #4a6fa5;
+      --secondary: #166088;
+      --accent: #4fc3f7;
+      --light: #f8f9fa;
+      --dark: #212529;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Courier', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #abdeff 0%, #f0f9ff 50%, #e0f7fa 100%),
+                  url('data:image/svg+xml;utf8,<svg opacity="0.03" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="%23000"/></svg>');
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Шапка */
+    header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    
+    .logo img {
+      height: 80px;
+      width: auto;
+    }
+    
+    .logo-text {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--dark);
+    }
+    
+    /* Навигация */
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 25px;
+    }
+    
+    nav a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      padding: 5px 0;
+      position: relative;
+      transition: color 0.3s;
+    }
+    
+    nav a:hover {
+      color: var(--primary);
+    }
+    
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s;
+    }
+    
+    nav a:hover::after {
+      width: 100%;
+    }
+    
+    /* Кнопки авторизации */
+    .auth-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn {
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-login {
+      background: transparent;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+    }
+    
+    .btn-login:hover {
+      background: rgba(74, 111, 165, 0.1);
+    }
+    
+    .btn-register {
+      background: var(--primary);
+      border: 1px solid var(--primary);
+      color: white;
+    }
+    
+    .btn-register:hover {
+      background: var(--secondary);
+      border-color: var(--secondary);
+    }
+    
+    /* Основное содержимое */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      width: 100%;
+    }
+    
+    .hero {
+      text-align: center;
+      margin: 50px 0;
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: var(--secondary);
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      color: #555;
+      max-width: 700px;
+      margin: 0 auto 30px;
+    }
+    
+    /* Поиск */
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      outline: none;
+      transition: box-shadow 0.3s;
+    }
+    
+    .search-input:focus {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .search-btn {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .search-btn:hover {
+      background: var(--secondary);
+    }
+    
+    /* Подвал */
+    footer {
+      background: var(--dark);
+      color: white;
+      padding: 30px 0;
+      margin-top: 50px;
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .copyright {
+      opacity: 0.8;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      transition: opacity 0.3s;
+    }
+    
+    .footer-links a:hover {
+      opacity: 0.8;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 900px) {
+      nav ul {
+        display: none; /* Скрываем навигацию на мобильных */
+      }
+      
+      .auth-buttons {
+        margin-left: auto;
+      }
+    }
+    
+    @media (max-width: 600px) {
+      .header-container {
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .logo {
+        order: 1;
+      }
+      
+      .auth-buttons {
+        order: 2;
+        margin-left: 0;
+      }
+      
+      nav {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+      }
+      
+      nav ul {
+        display: flex;
+        gap: 15px;
+      }
+      
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .footer-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+      
+      .footer-links a {
+        margin: 0 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<header>
-    <h1>Добро пожаловать в обитель книжного червя!</h1>
-</header>
-
-<nav>
-    <a href="книги.html">Каталог книг</a>
-    <a href="новости.html">Новости</a>
-    <a href="презентации.html">Презентации</a>
-</nav>
-
-<div class="container">
-    <h1>О нашей библиотеке</h1>
-    <p>На этом сайте вы сможете быстро и без проблем найти и скачать книгу из программы СПО.</p>
-
-    <!-- Форма поиска -->
-    <form id="searchForm" class="search-form">
-        <input type="text" id="searchInput" class="search-input" placeholder="Введите название книги...">
-        <button type="submit" class="search-btn">Искать</button>
-    </form>
-
-    <!-- Блок для вывода результатов поиска -->
-    <div id="searchResults"></div>
-</div>
-
-<footer>
-    <p>© 2025 Книжный червь. Все права защищены.</p>
-    <p>
-    </p>
-    <p>
-        <a href="О нас.html" >О нас</a> |
-        <a href="http://www.republiquedesmangues.fr/" style="color:#333" target="_blank">НАЖМИ!</a>
-    </p>
-</footer>
-
-<script>
-    // Функция для отправки запроса на сервер
-    async function searchBooks() {
-        const searchTerm = document.getElementById('searchInput').value;
-
-        if (!searchTerm) return;
-
-        try {
-            const response = await fetch('/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ query: searchTerm })
-            });
-
-            const data = await response.json();
-
-            // Отображение результатов поиска
-            const resultsContainer = document.getElementById('searchResults');
-            resultsContainer.innerHTML = '';
-
-            if (data.length > 0) {
-                data.forEach(book => {
-                    const bookItem = `
-                        <div class="book-item">
-                            <h3>${book.title}</h3>
-                            <p>Автор: ${book.author}</p>
-                            <p>Год издания: ${book.year}</p>
-                            <p>Жанр: ${book.genre}</p>
-                        </div>
-                    `;
-                    resultsContainer.insertAdjacentHTML('beforeend', bookItem);
-                });
-            } else {
-                resultsContainer.textContent = 'К сожалению, ничего не найдено.';
-            }
-        } catch (error) {
-            console.error('Ошибка при поиске:', error);
-            alert('Произошла ошибка при выполнении поиска.');
-        }
+  <!-- Шапка сайта -->
+  <header>
+    <div class="header-container">
+      <a href="Главная.html" class="logo">
+        <img src="/photos/logo.png" alt="Логотип библиотеки">
+        <span class="logo-text">Книжный червь</span>
+      </a>
+      
+      <nav>
+        <ul>
+          <li><a href="книги.html">Каталог книг</a></li>
+          <li><a href="презентации.html">Презентации</a></li>
+          <li><a href="новости.html">Новости</a></li>
+        </ul>
+        
+        <div class="auth-buttons">
+          <button class="btn btn-login">Вход</button>
+          <button class="btn btn-register">Регистрация</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Основное содержимое -->
+  <main>
+    <section class="hero">
+      <h1>Добро пожаловать в обитель Книжного червя</h1>
+      <p>На этом сайте хранятся все книги по программе СПО, а также презентации по литературе.</p>
+      
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Поиск по названию, автору или жанру...">
+        <button class="search-btn">Найти</button>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Подвал с наклоном -->
+  <footer>
+    <div class="footer-content">
+      <div class="copyright">
+        © 2025 Книжный червь. Все права защищены.
+      </div>
+      <div class="footer-links">
+        <a href="О нас.html">О нас</a>
+        <a href="http://fallingfalling.com/" style="color:#33333300" target="_blank">НАЖМИ ЕСЛИ ТЫ ЭПИЛЕПТИК!</a>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Поиск по нажатию кнопки или Enter
+    const searchBtn = document.querySelector('.search-btn');
+    const searchInput = document.querySelector('.search-input');
+    
+    function handleSearch() {
+      const query = searchInput.value.trim();
+      if (query) {
+        alert(`Ищем: "${query}"`);
+        // window.location.href = `search.html?q=${encodeURIComponent(query)}`;
+      }
     }
-
-    // Обработчик события отправки формы
-    document.getElementById('searchForm').addEventListener('submit', event => {
-        event.preventDefault(); // Предотвращаем перезагрузку страницы
-        searchBooks(); // Выполняем поиск
+    
+    searchBtn.addEventListener('click', handleSearch);
+    searchInput.addEventListener('keypress', (e) => e.key === 'Enter' && handleSearch());
+    
+    // Обработчики кнопок входа/регистрации
+    document.querySelector('.btn-login').addEventListener('click', () => {
+      window.location.href = 'вход.html'; // Замените на свой URL
     });
-</script>
-
+    
+    document.querySelector('.btn-register').addEventListener('click', () => {
+      window.location.href = 'регистрация.html'; // Замените на свой URL
+    });
+  </script>
 </body>
 </html>
