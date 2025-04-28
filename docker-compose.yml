@@ -1,0 +1,25 @@
+version: '3'
+services:
+    db:
+        image: postgres:15
+        restart: always
+        environment:
+            POSTGRES_USER: ksyuwhy
+            POSTGRES_PASSWORD: myluvitsme
+            POSTGRES_DB: librarydb
+        ports:
+            - "5432:5432"
+        volumes:
+            - db_data:/var/lib/postgresql/data
+    
+    pgadmin:
+        image: dpage/pgadmin4
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: neformalkagolubaa@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        ports:
+        - "5050:80"
+    
+volumes:
+    db_data:
