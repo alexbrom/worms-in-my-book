@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог книг | Книжный червь</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #166088;
+            --accent: #4fc3f7;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #abdeff 0%, #f0f9ff 50%, #e0f7fa 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--dark);
+        }
+
+        .back-btn {
+            padding: 8px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: var(--secondary);
+        }
+
+        .catalog-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .catalog-title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        .books-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+
+        .book-card {
+            width: 250px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-cover {
+            height: 300px;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #666;
+            overflow: hidden;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-info {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .book-title {
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .book-author {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .book-year {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination-btn {
+            padding: 8px 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .pagination-btn:hover {
+            background: var(--secondary);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .books-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .book-cover {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="Главная.html" class="logo">
+                <span>Книжный червь</span>
+            </a>
+            <button class="back-btn" onclick="window.location.href='Главная.html'">На главную</button>
+        </div>
+    </header>
+
+    <div class="catalog-container">
+        <h1 class="catalog-title">Каталог книг</h1>
+        <div class="books-grid" id="booksGrid"></div>
+        <div class="pagination">
+            <button class="pagination-btn" id="prevPage">Назад</button>
+            <button class="pagination-btn" id="nextPage">Вперед</button>
+        </div>
+        <div class="page-info" id="pageInfo"></div>
+    </div>
+
+    <script src="books-database.js"></script>
+    <script>
+        // Константы для пагинации
+        const BOOKS_PER_PAGE = 6;
+        let currentPage = 1;
+
+        // Получаем все книги из базы данных
+        const allBooks = booksDatabase.getAllBooks();
+        const totalPages = Math.ceil(allBooks.length / BOOKS_PER_PAGE);
+
+        // Функция для отображения книг на текущей странице
+        function renderBooks() {
+            const booksGrid = document.getElementById('booksGrid');
+            booksGrid.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
+            const endIndex = startIndex + BOOKS_PER_PAGE;
+            const booksToShow = allBooks.slice(startIndex, endIndex);
+
+            booksToShow.forEach(book => {
+                const bookCard = document.createElement('div');
+                bookCard.className = 'book-card';
+                bookCard.onclick = () => window.location.href = `книга.html?id=${book.id}`;
+
+                bookCard.innerHTML = `
+                    <div class="book-cover">
+                        <img src="${book.coverUrl}" alt="${book.title}" onerror="this.style.display='none'; this.parentElement.textContent='${book.title.split(' ').map(word => word[0]).join('')}'">
+                    </div>
+                    <div class="book-info">
+                        <h3 class="book-title">${book.title}</h3>
+                        <div class="book-author">${book.author}</div>
+                        <div class="book-year">${book.year} год</div>
+                    </div>
+                `;
+
+                booksGrid.appendChild(bookCard);
+            });
+
+            // Обновляем информацию о странице
+            document.getElementById('pageInfo').textContent = `Страница ${currentPage} из ${totalPages}`;
+            
+            // Обновляем состояние кнопок пагинации
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        // Обработчики событий для кнопок пагинации
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderBooks();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderBooks();
+            }
+        });
+
+        // Инициализация при загрузке страницы
+        renderBooks();
+    </script>
+</body>
+</html>

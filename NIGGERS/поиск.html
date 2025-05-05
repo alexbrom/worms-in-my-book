@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Поиск по сайту</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        .search-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .search-results {
+            list-style: none;
+            padding: 0;
+        }
+        .search-result-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .search-result-item:hover {
+            background-color: #f5f5f5;
+        }
+        .result-title {
+            font-size: 18px;
+            color: #1a0dab;
+            margin-bottom: 5px;
+        }
+        .result-url {
+            color: #006621;
+            font-size: 14px;
+        }
+        .result-snippet {
+            color: #545454;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <h1>Поиск по сайту</h1>
+        <input type="text" id="searchInput" class="search-box" placeholder="Введите поисковый запрос...">
+        <ul id="searchResults" class="search-results"></ul>
+    </div>
+
+    <script>
+        // Массив страниц для поиска
+        const pages = [
+            { title: 'Главная', url: 'Главная.html' },
+            { title: 'Новости', url: 'новости.html' },
+            { title: 'О нас', url: 'О нас.html' },
+            { title: 'Информация', url: 'информация.html' },
+            { title: 'Книги', url: 'книги.html' }
+        ];
+
+        // Функция для загрузки содержимого страницы
+        async function loadPageContent(url) {
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                return text;
+            } catch (error) {
+                console.error('Ошибка загрузки страницы:', error);
+                return '';
+            }
+        }
+
+        // Функция для поиска
+        async function search(query) {
+            const results = [];
+            query = query.toLowerCase();
+
+            for (const page of pages) {
+                const content = await loadPageContent(page.url);
+                if (content.toLowerCase().includes(query)) {
+                    // Создаем сниппет
+                    const startIndex = content.toLowerCase().indexOf(query);
+                    const snippetStart = Math.max(0, startIndex - 50);
+                    const snippetEnd = Math.min(content.length, startIndex + query.length + 50);
+                    const snippet = content.substring(snippetStart, snippetEnd) + '...';
+
+                    results.push({
+                        title: page.title,
+                        url: page.url,
+                        snippet: snippet
+                    });
+                }
+            }
+
+            return results;
+        }
+
+        // Обработчик ввода в поисковую строку
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        searchInput.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+            if (query.length < 2) {
+                searchResults.innerHTML = '';
+                return;
+            }
+
+            const results = await search(query);
+            displayResults(results);
+        });
+
+        // Функция для отображения результатов
+        function displayResults(results) {
+            searchResults.innerHTML = '';
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<li>Ничего не найдено</li>';
+                return;
+            }
+
+            results.forEach(result => {
+                const li = document.createElement('li');
+                li.className = 'search-result-item';
+                li.innerHTML = `
+                    <div class="result-title">${result.title}</div>
+                    <div class="result-url">${result.url}</div>
+                    <div class="result-snippet">${result.snippet}</div>
+                `;
+                li.addEventListener('click', () => {
+                    window.location.href = result.url;
+                });
+                searchResults.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html> 
