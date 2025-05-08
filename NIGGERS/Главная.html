@@ -268,9 +268,10 @@
       color: white;
       padding: 30px 0;
       margin-top: 50px;
+      width: 100%;
     }
     
-    .footer-container {
+    .footer-content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
@@ -281,13 +282,20 @@
     
     .copyright {
       opacity: 0.8;
+      font-size: 14px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
     }
     
     .footer-links a {
       color: white;
       text-decoration: none;
-      margin-left: 20px;
       transition: opacity 0.3s;
+      font-size: 14px;
     }
     
     .footer-links a:hover {
@@ -341,9 +349,90 @@
         text-align: center;
       }
       
-      .footer-links a {
-        margin: 0 10px;
+      .footer-links {
+        justify-content: center;
       }
+    }
+
+    /* Стили для меню пользователя */
+    .user-menu {
+      position: relative;
+      display: none;
+      align-items: center;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 8px 15px;
+      border-radius: 20px;
+      background: rgba(74, 111, 165, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .user-info:hover {
+      background: rgba(74, 111, 165, 0.2);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+
+    .user-name {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+      min-width: 150px;
+      display: none;
+      z-index: 1000;
+    }
+
+    .user-info:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu a,
+    .dropdown-menu button {
+      display: block;
+      width: 100%;
+      padding: 8px 15px;
+      text-align: left;
+      border: none;
+      background: none;
+      color: var(--dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .dropdown-menu a:hover,
+    .dropdown-menu button:hover {
+      background: rgba(74, 111, 165, 0.1);
+      color: var(--primary);
+    }
+
+    .dropdown-menu button {
+      border-top: 1px solid #eee;
+      color: #dc3545;
+    }
+
+    .dropdown-menu button:hover {
+      color: #c82333;
     }
   </style>
 </head>
@@ -366,6 +455,17 @@
           <button class="btn btn-login">Вход</button>
           <button class="btn btn-register">Регистрация</button>
         </div>
+
+        <div class="user-menu" style="display: none;">
+          <div class="user-info">
+            <img src="/photos/default-avatar.png" alt="Аватар пользователя" class="user-avatar" id="userAvatar">
+            <span class="user-name" id="userName"></span>
+            <div class="dropdown-menu">
+              <a href="профиль.html" id="profileLink">Профиль</a>
+              <button id="logoutButton">Выйти</button>
+            </div>
+          </div>
+        </div>
       </nav>
     </div>
   </header>
@@ -386,7 +486,7 @@
     </section>
   </main>
   
-  <!-- Подвал с наклоном -->
+  <!-- Подвал -->
   <footer>
     <div class="footer-content">
       <div class="copyright">
@@ -457,13 +557,52 @@
       }
     });
 
+    // Функция для проверки авторизации
+    function checkAuth() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const authButtons = document.querySelector('.auth-buttons');
+      const userMenu = document.querySelector('.user-menu');
+      
+      if (currentUser) {
+        // Пользователь авторизован
+        authButtons.style.display = 'none';
+        userMenu.style.display = 'flex';
+        document.getElementById('userName').textContent = currentUser.username;
+        
+        // Загружаем аватарку
+        const userAvatar = document.getElementById('userAvatar');
+        if (currentUser.avatar) {
+          userAvatar.src = currentUser.avatar;
+        }
+      } else {
+        // Пользователь не авторизован
+        authButtons.style.display = 'flex';
+        userMenu.style.display = 'none';
+      }
+    }
+
+    // Вызываем проверку при загрузке страницы
+    checkAuth();
+
     // Обработчики кнопок входа/регистрации
     document.querySelector('.btn-login').addEventListener('click', () => {
-      window.location.href = 'вход.html'; // Замените на свой URL
+      window.location.href = 'вход.html';
     });
     
     document.querySelector('.btn-register').addEventListener('click', () => {
-      window.location.href = 'регистрация.html'; // Замените на свой URL
+      window.location.href = 'регистрация.html';
+    });
+
+    // Обработчик выхода
+    document.getElementById('logoutButton').addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      checkAuth();
+      window.location.href = 'Главная.html';
+    });
+
+    // Обработчик перехода в профиль
+    document.getElementById('profileLink').addEventListener('click', () => {
+      window.location.href = 'профиль.html';
     });
   </script>
 </body>

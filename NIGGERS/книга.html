@@ -152,6 +152,34 @@
             transition: all 0.3s;
             border: none;
             cursor: pointer;
+            position: relative;
+        }
+
+        .download-btn.loading {
+            background: var(--secondary);
+            pointer-events: none;
+        }
+
+        .download-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .download-btn.loading span {
+            visibility: hidden;
         }
 
         .download-btn:hover {
@@ -256,14 +284,51 @@
             // Настраиваем кнопку скачивания
             const downloadBtn = document.getElementById('downloadBtn');
             if (book.fileUrl) {
-                downloadBtn.addEventListener('click', () => {
-                    // Создаем временную ссылку для скачивания
-                    const link = document.createElement('a');
-                    link.href = book.fileUrl;
-                    link.download = `${book.title} - ${book.author}.pdf`; // Имя файла при скачивании
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                downloadBtn.addEventListener('click', async () => {
+                    // Проверяем авторизацию пользователя
+                    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                    
+                    if (!currentUser) {
+                        // Если пользователь не авторизован, показываем сообщение и перенаправляем на страницу входа
+                        if (confirm('Для скачивания книги необходимо войти в аккаунт. Хотите войти сейчас?')) {
+                            window.location.href = 'вход.html';
+                        }
+                        return;
+                    }
+
+                    try {
+                        // Добавляем индикатор загрузки
+                        downloadBtn.classList.add('loading');
+                        const originalText = downloadBtn.innerHTML;
+                        downloadBtn.innerHTML = '<span>Скачивание...</span>';
+
+                        // Создаем ссылку для скачивания
+                        const link = document.createElement('a');
+                        link.href = book.fileUrl;
+                        link.download = `${book.title} - ${book.author}.pdf`;
+                        
+                        // Добавляем обработчик завершения загрузки
+                        link.onload = () => {
+                            downloadBtn.classList.remove('loading');
+                            downloadBtn.innerHTML = originalText;
+                        };
+
+                        // Запускаем скачивание
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+
+                        // Возвращаем кнопку в исходное состояние через 2 секунды
+                        setTimeout(() => {
+                            downloadBtn.classList.remove('loading');
+                            downloadBtn.innerHTML = originalText;
+                        }, 2000);
+                    } catch (error) {
+                        console.error('Ошибка при скачивании:', error);
+                        alert('Произошла ошибка при скачивании книги. Пожалуйста, попробуйте позже.');
+                        downloadBtn.classList.remove('loading');
+                        downloadBtn.innerHTML = originalText;
+                    }
                 });
             } else {
                 downloadBtn.disabled = true;
