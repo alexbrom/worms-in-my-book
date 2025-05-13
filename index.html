@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Книжный червь - Библиотека</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        :root {
+            --primary: #FF3366;
+            --secondary: #6C63FF;
+            --accent: #00F5A0;
+            --dark: #1A1B1E;
+            --light: #FFFFFF;
+            --gradient: linear-gradient(135deg, #FF3366, #6C63FF);
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/png;base64,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');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(26, 27, 30, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: "📚";
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav ul li a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            transition: all 0.3s ease;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        nav ul li a:hover::before {
+            left: 0;
+            opacity: 1;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .auth-buttons button {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--accent) !important;
+        }
+
+        .register-btn {
+            background: var(--gradient);
+            color: var(--light);
+        }
+
+        .auth-buttons button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .auth-buttons button:hover::before {
+            left: 0;
+        }
+
+        .hero {
+            margin-top: 100px;
+            padding: 4rem 0;
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .search-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.5rem;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent);
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            outline: none;
+            background: transparent;
+            color: var(--light);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-box button {
+            background: var(--gradient);
+            color: var(--light);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .search-box button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover::before {
+            left: 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: var(--light);
+            position: relative;
+            display: inline-block;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(108, 99, 255, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        footer {
+            background: rgba(26, 27, 30, 0.8);
+            backdrop-filter: blur(10px);
+            color: var(--light);
+            padding: 1.5rem 0;
+            margin-top: auto;
+            position: relative;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .footer-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            transition: all 0.3s ease;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .footer-links a:hover::before {
+            left: 0;
+            opacity: 1;
+        }
+
+        .copyright {
+            color: var(--accent);
+            position: relative;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .secret-link {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .copyright:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: rgba(26, 27, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            margin-top: 10px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .suggestion-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .suggestion-title {
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        .suggestion-author {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+
+        /* Стилизация скроллбара */
+        .search-suggestions::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .search-suggestions::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .search-suggestions::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        .search-suggestions::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        .nav-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            color: #333;
+            margin-right: 0.7rem;
+            box-shadow: 0 2px 8px 0 rgba(108,99,255,0.10), 0 0 0 2px #fff;
+            border: 2px solid #e0e7ff;
+            transition: box-shadow 0.25s, border-color 0.25s, background 0.25s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-avatar:hover {
+            box-shadow: 0 0 0 5px #6C63FF55, 0 2px 8px 0 rgba(108,99,255,0.13);
+            border-color: #6C63FF;
+            background: linear-gradient(135deg, #e0e7ff 60%, #FF3366 100%);
+        }
+        .nav-avatar img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: filter 0.2s;
+        }
+        .nav-avatar:active {
+            box-shadow: 0 0 0 8px #00F5A055, 0 2px 8px 0 rgba(108,99,255,0.13);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">Книжный червь</a>
+                <nav>
+                    <ul>
+                        <li><a href="catalog.html">Каталог книг</a></li>
+                        <li><a href="news.html">Новости</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="login-btn">Войти</button>
+                    <button class="register-btn">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Добро пожаловать в обитель Книжного червя</h1>
+            <p>Легкий поиск книг по литературе СПО</p>
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Введите название книги...">
+                    <button onclick="searchBooks()">Найти</button>
+                </div>
+                <div class="search-suggestions"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    <a href="secret.html" class="secret-link" title="Секретная страница"></a>
+                    &copy; 2025 Книжный червь. Все права защищены.
+                </div>
+                <div class="footer-links">
+                    <a href="about.html">О нас</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Глобальные функции для поиска
+        function searchBooks() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
+            if (!searchTerm) {
+                return; // Не делаем ничего, если поисковый запрос пустой
+            }
+
+            // Фильтруем книги по поисковому запросу
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(searchTerm) ||
+                book.author.toLowerCase().includes(searchTerm) ||
+                book.description.toLowerCase().includes(searchTerm)
+            );
+
+            if (filteredBooks.length > 0) {
+                // Если найдены книги, перенаправляем на каталог с параметром поиска
+                window.location.href = `catalog.html?search=${encodeURIComponent(searchTerm)}`;
+            } else {
+                // Если книги не найдены, показываем сообщение
+                const searchBox = document.querySelector('.search-box');
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'error-message';
+                errorMessage.textContent = 'Книги не найдены';
+                errorMessage.style.color = '#FF3366';
+                errorMessage.style.marginTop = '10px';
+                errorMessage.style.textAlign = 'center';
+                
+                // Удаляем предыдущее сообщение об ошибке, если оно есть
+                const existingError = searchBox.querySelector('.error-message');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
+                searchBox.appendChild(errorMessage);
+                
+                // Удаляем сообщение через 3 секунды
+                setTimeout(() => {
+                    errorMessage.remove();
+                }, 3000);
+            }
+        }
+
+        // Добавляем функцию debounce для задержки поиска
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Создаем debounced версию функции поиска
+        const debouncedSearch = debounce(searchBooks, 500);
+
+        // Добавляем обработчик события для поиска при нажатии Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                searchBooks();
+            }
+        });
+
+        // Удаляем обработчик input, который вызывал поиск при каждом вводе
+        // Вместо этого используем только показ подсказок
+        document.getElementById('searchInput').addEventListener('input', function(event) {
+            showSuggestions(event.target.value);
+        });
+
+        function selectSuggestion(title) {
+            document.getElementById('searchInput').value = title;
+            document.querySelector('.search-suggestions').classList.remove('active');
+            searchBooks();
+        }
+
+        // Функция генерации аватара
+        function getInitials(name) {
+            if (!name) return '?';
+            return name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+        }
+        function renderAvatarInNav(user) {
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'nav-avatar';
+            avatarDiv.title = 'Профиль';
+            avatarDiv.onclick = () => window.location.href = 'profile.html';
+            if (user.avatar) {
+                const img = document.createElement('img');
+                img.src = user.avatar;
+                img.alt = 'Аватар';
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = '50%';
+                avatarDiv.appendChild(img);
+            } else {
+                avatarDiv.textContent = getInitials(user.name);
+            }
+            return avatarDiv;
+        }
+        const authButtons = document.getElementById('authButtons');
+        function renderAuthButtons() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (user) {
+                authButtons.innerHTML = `<button class="logout-btn">Выйти</button>`;
+                const avatar = renderAvatarInNav(user);
+                authButtons.prepend(avatar);
+                authButtons.querySelector('.logout-btn').onclick = () => {
+                    localStorage.removeItem('currentUser');
+                    window.location.reload();
+                };
+            } else {
+                authButtons.innerHTML = `
+                    <button class="login-btn">Войти</button>
+                    <button class="register-btn">Регистрация</button>
+                `;
+                authButtons.querySelector('.login-btn').onclick = () => window.location.href = 'login.html';
+                authButtons.querySelector('.register-btn').onclick = () => window.location.href = 'register.html';
+            }
+        }
+        renderAuthButtons();
+    </script>
+    <script type="module">
+        import books from './books.js';
+        
+        // Делаем books доступным глобально
+        window.books = books;
+
+        // Функция для отображения подсказок
+        function showSuggestions(searchTerm) {
+            const suggestionsContainer = document.querySelector('.search-suggestions');
+            const searchInput = document.getElementById('searchInput');
+            
+            if (!searchTerm.trim()) {
+                suggestionsContainer.classList.remove('active');
+                return;
+            }
+
+            const filteredBooks = books.filter(book => 
+                book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                book.author.toLowerCase().includes(searchTerm.toLowerCase())
+            ).slice(0, 5); // Показываем только первые 5 результатов
+
+            if (filteredBooks.length > 0) {
+                suggestionsContainer.innerHTML = filteredBooks.map(book => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${book.title}')">
+                        <span class="suggestion-title">${book.title}</span>
+                        <span class="suggestion-author">${book.author}</span>
+                    </div>
+                `).join('');
+                suggestionsContainer.classList.add('active');
+            } else {
+                suggestionsContainer.classList.remove('active');
+            }
+        }
+
+        // Обновляем обработчик ввода
+        document.getElementById('searchInput').addEventListener('input', function(event) {
+            showSuggestions(event.target.value);
+        });
+
+        // Закрываем подсказки при клике вне поиска
+        document.addEventListener('click', function(event) {
+            const searchContainer = document.querySelector('.search-container');
+            const suggestionsContainer = document.querySelector('.search-suggestions');
+            
+            if (!searchContainer.contains(event.target)) {
+                suggestionsContainer.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

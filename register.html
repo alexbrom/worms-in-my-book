@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация — Книжный червь</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #1A1B1E;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-container {
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem auto;
+        }
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .auth-form input {
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        .auth-form input::placeholder {
+            color: #bbb;
+        }
+        .auth-form button {
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .auth-form button:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .auth-links a {
+            color: #00F5A0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .auth-links a:hover {
+            color: #FF3366;
+        }
+        .error-message {
+            color: #FF3366;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>Регистрация</h2>
+        <form class="auth-form" id="registerForm">
+            <input type="text" id="regName" placeholder="Имя" required>
+            <input type="email" id="regEmail" placeholder="Email" required>
+            <input type="text" id="regLogin" placeholder="Логин" required>
+            <input type="password" id="regPassword" placeholder="Пароль" required>
+            <input type="password" id="regPassword2" placeholder="Повторите пароль" required>
+            <div class="error-message" id="regError"></div>
+            <button type="submit">Зарегистрироваться</button>
+        </form>
+        <div class="auth-links">
+            Уже есть аккаунт? <a href="login.html">Войти</a>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const login = document.getElementById('regLogin').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const password2 = document.getElementById('regPassword2').value;
+            const errorDiv = document.getElementById('regError');
+            errorDiv.textContent = '';
+            if (password !== password2) {
+                errorDiv.textContent = 'Пароли не совпадают';
+                return;
+            }
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.find(u => u.email === email)) {
+                errorDiv.textContent = 'Пользователь с таким email уже зарегистрирован';
+                return;
+            }
+            if (users.find(u => u.login === login)) {
+                errorDiv.textContent = 'Пользователь с таким логином уже зарегистрирован';
+                return;
+            }
+            const user = { name, email, login, password };
+            users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            window.location.href = 'profile.html';
+        });
+        // Если уже авторизован — сразу в профиль
+        if (localStorage.getItem('currentUser')) {
+            window.location.href = 'profile.html';
+        }
+    </script>
+</body>
+</html> 
