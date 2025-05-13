@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Секретка</title>
+    <style>
+        body {
+            background: #000;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .screamer-img {
+            max-width: 90vw;
+            max-height: 60vh;
+            border-radius: 18px;
+            box-shadow: 0 0 40px 10px #ff3366aa;
+            margin-bottom: 2rem;
+        }
+        .close-btn {
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 2.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: background 0.3s;
+        }
+        .close-btn:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+    </style>
+</head>
+<body>
+    <img src="https://avatars.mds.yandex.net/i?id=a271c3887dfdacdaef568fabc911bb1d_l-5143133-images-thumbs&n=13" alt="SCREAM!" class="screamer-img">
+    <audio id="screamerAudio" src="zvuk-rabotajuschego-dusha.mp3" preload="auto"></audio>
+    <button class="close-btn" onclick="window.location.href='profile.html'">Закрыть</button>
+    <script>
+        // Автоматически воспроизводим звук
+        setTimeout(() => {
+            const audio = document.getElementById('screamerAudio');
+            audio.volume = 0.7;
+            audio.play();
+        }, 400);
+        // Также воспроизводим при клике на картинку
+        document.querySelector('.screamer-img').onclick = function() {
+            const audio = document.getElementById('screamerAudio');
+            audio.currentTime = 0;
+            audio.play();
+        };
+    </script>
+</body>
+</html> 
