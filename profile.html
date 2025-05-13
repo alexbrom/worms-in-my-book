@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль — Книжный червь</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #1A1B1E;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-container {
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem auto;
+            position: relative;
+        }
+        .profile-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .profile-info {
+            margin-bottom: 2rem;
+        }
+        .profile-info div {
+            margin-bottom: 0.7rem;
+            font-size: 1.1rem;
+        }
+        .logout-btn {
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            color: #fff;
+            border: none;
+            padding: 1rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #fff;
+            margin: 0 auto 1.5rem auto;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 4px 16px rgba(108,99,255,0.15);
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .avatar-upload {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        .avatar-upload label {
+            background: var(--gradient);
+            color: #fff;
+            padding: 0.4rem 1.1rem;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .avatar-upload label:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+        .edit-nick {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+        }
+        .edit-nick input {
+            padding: 0.4rem 0.7rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1.05rem;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            outline: none;
+        }
+        .edit-nick button {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            padding: 0.4rem 1rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .edit-nick button:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+        .home-btn {
+            position: absolute;
+            top: 22px;
+            right: 22px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px 0 rgba(108,99,255,0.10);
+            cursor: pointer;
+            transition: box-shadow 0.25s, background 0.25s, transform 0.18s;
+            z-index: 10;
+        }
+        .home-btn:hover {
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            box-shadow: 0 0 0 4px #6C63FF55, 0 2px 8px 0 rgba(108,99,255,0.13);
+            transform: scale(1.08);
+        }
+        .home-btn svg {
+            display: block;
+        }
+        .pet-corner {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 1002;
+            pointer-events: none;
+        }
+        .pet-svg {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: auto;
+        }
+        .pet-advice {
+            position: absolute;
+            right: 90px;
+            bottom: 38px;
+            background: #fff;
+            color: #333;
+            border-radius: 18px;
+            padding: 0.8rem 1.3rem;
+            font-size: 1.08rem;
+            font-weight: 500;
+            box-shadow: 0 2px 12px 0 #F7BFA033;
+            min-width: 180px;
+            max-width: 260px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            opacity: 0.97;
+            animation: petAdviceAppear 0.5s;
+        }
+        @keyframes petAdviceAppear {
+            0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+            100% { opacity: 0.97; transform: none; }
+        }
+        .pet-advice-tail {
+            position: absolute;
+            right: -22px;
+            bottom: 18px;
+            width: 28px;
+            height: 22px;
+            background: #fff;
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 2px 8px 0 #F7BFA033;
+            z-index: 1;
+            transform: rotate(25deg);
+        }
+        .pet-advice-btn {
+            position: relative;
+            margin-top: 15px;
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 0.4rem 1.1rem;
+            font-size: 0.98rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+            z-index: 2;
+            pointer-events: auto;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        .pet-advice-btn:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+        }
+        @media (max-width: 600px) {
+            .pet-corner {
+                right: 2vw;
+                bottom: 12vw;
+            }
+            .pet-advice {
+                right: 80px;
+                min-width: 120px;
+                font-size: 0.95rem;
+            }
+            .pet-advice-btn {
+                margin-top: 10px;
+            }
+        }
+        .secret-night-link {
+            display: none !important;
+        }
+        .cat-ear-secret {
+            opacity: 1;
+            transition: filter 0.3s, box-shadow 0.3s;
+        }
+        .cat-ear-secret:hover {
+            filter: drop-shadow(0 0 12px #FF3366) brightness(1.15);
+            box-shadow: 0 0 16px 4px #FF3366aa;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <h2>Профиль</h2>
+        <div class="avatar" id="avatar"></div>
+        <div class="avatar-upload">
+            <label for="avatarInput">Изменить аватар</label>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none">
+        </div>
+        <div class="profile-info" id="profileInfo"></div>
+        <div class="pet-corner">
+            <div class="pet-svg">
+                <!-- Минималистичный эмоджи-котик с кликабельным левым ухом -->
+                <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Левое ухо (секретная ссылка) -->
+                  <ellipse id="catEarSecret" class="cat-ear-secret" cx="22" cy="22" rx="10" ry="14" fill="#FBE9D0" transform="rotate(-18 22 22)" style="cursor:pointer;"/>
+                  <!-- Правое ухо -->
+                  <ellipse cx="58" cy="22" rx="10" ry="14" fill="#FBE9D0" transform="rotate(18 58 22)"/>
+                  <!-- Мордочка -->
+                  <circle cx="40" cy="44" r="28" fill="#FBE9D0"/>
+                  <!-- Глаза -->
+                  <ellipse cx="30" cy="48" rx="4" ry="6" fill="#fff"/>
+                  <ellipse cx="50" cy="48" rx="4" ry="6" fill="#fff"/>
+                  <ellipse cx="30" cy="48" rx="2.1" ry="3.2" fill="#333"/>
+                  <ellipse cx="50" cy="48" rx="2.1" ry="3.2" fill="#333"/>
+                  <!-- Щёчки -->
+                  <ellipse cx="26" cy="58" rx="3.2" ry="1.7" fill="#FFB6B6"/>
+                  <ellipse cx="54" cy="58" rx="3.2" ry="1.7" fill="#FFB6B6"/>
+                  <!-- Улыбка -->
+                  <path d="M32 60 Q40 66 48 60" stroke="#333" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                </svg>
+                <div class="pet-advice" id="petAdvice">
+                  <span id="petAdviceText"></span>
+                  <span class="pet-advice-tail"></span>
+                </div>
+            </div>
+            <button class="pet-advice-btn" id="petAdviceBtn">Ещё совет</button>
+        </div>
+        <button class="logout-btn" id="logoutBtn">Выйти</button>
+        <button class="home-btn" id="homeBtn" title="На главную"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5L11 4L19 10.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 9.5V18C5 18.5523 5.44772 19 6 19H16C16.5523 19 17 18.5523 17 18V9.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+    <script>
+        function getInitials(name) {
+            if (!name) return '?';
+            return name.trim().split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+        }
+        function renderAvatar(user) {
+            const avatarDiv = document.getElementById('avatar');
+            avatarDiv.innerHTML = '';
+            if (user.avatar) {
+                const img = document.createElement('img');
+                img.src = user.avatar;
+                img.alt = 'Аватар';
+                avatarDiv.appendChild(img);
+            } else {
+                avatarDiv.textContent = getInitials(user.name);
+            }
+        }
+        function saveUserToStorage(user) {
+            // Обновляем пользователя в users
+            let users = JSON.parse(localStorage.getItem('users') || '[]');
+            users = users.map(u => (u.email === user.email ? user : u));
+            localStorage.setItem('users', JSON.stringify(users));
+            localStorage.setItem('currentUser', JSON.stringify(user));
+        }
+        const user = JSON.parse(localStorage.getItem('currentUser'));
+        if (!user) {
+            window.location.href = 'login.html';
+        } else {
+            renderAvatar(user);
+            // Ник редактируемый
+            document.getElementById('profileInfo').innerHTML = `
+                <div class="edit-nick">
+                    <input type="text" id="editNickInput" value="${user.name}" maxlength="32">
+                    <button id="saveNickBtn">Сохранить</button>
+                </div>
+                <div><b>Email:</b> ${user.email}</div>
+                <div><b>Логин:</b> ${user.login}</div>
+            `;
+        }
+        // Смена ника
+        document.getElementById('saveNickBtn').onclick = function() {
+            const newNick = document.getElementById('editNickInput').value.trim();
+            if (newNick.length < 2) {
+                alert('Имя должно быть не короче 2 символов');
+                return;
+            }
+            user.name = newNick;
+            saveUserToStorage(user);
+            renderAvatar(user);
+            alert('Имя успешно изменено!');
+        };
+        // Смена аватара
+        document.getElementById('avatarInput').onchange = function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                user.avatar = evt.target.result;
+                saveUserToStorage(user);
+                renderAvatar(user);
+            };
+            reader.readAsDataURL(file);
+        };
+        document.getElementById('logoutBtn').onclick = function() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'index.html';
+        };
+        document.getElementById('homeBtn').onclick = function() {
+            window.location.href = 'index.html';
+        };
+        // --- Котик и советы ---
+        const advices = [
+            'Не забывай делать перерывы во время чтения!',
+            'Попробуй читать по 20 минут каждый день — это полезно!',
+            'Делай заметки — так ты лучше запомнишь прочитанное.',
+            'Не бойся задавать вопросы — любопытство делает тебя умнее!',
+            'Пей воду и отдыхай — мозгу нужен ресурс для учёбы.',
+            'Делись интересными книгами с друзьями!',
+            'Пробуй читать в разное время суток — найди свой ритм.',
+            'Не сдавайся, если книга кажется сложной — всё получится!',
+            'Сохраняй спокойствие и читай с удовольствием!',
+            'Пусть чтение будет твоим приключением!',
+            'Не забывай принимать душ'
+        ];
+        function showRandomAdvice() {
+            const petAdvice = document.getElementById('petAdviceText');
+            const idx = Math.floor(Math.random() * advices.length);
+            petAdvice.textContent = advices[idx];
+        }
+        showRandomAdvice();
+        document.getElementById('petAdviceBtn').onclick = showRandomAdvice;
+        // Секретная ссылка: клик по левому уху котика
+        document.getElementById('catEarSecret').onclick = function(e) {
+            e.stopPropagation();
+            window.location.href = 'test.html';
+        };
+    </script>
+</body>
+</html> 

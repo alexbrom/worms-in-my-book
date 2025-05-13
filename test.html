@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест — Секретка</title>
+    <style>
+        body {
+            background: #1A1B1E;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .test-container {
+            background: rgba(255,255,255,0.04);
+            border-radius: 20px;
+            padding: 2.5rem 2rem 2rem 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+            margin: 2rem auto;
+            text-align: center;
+        }
+        .test-question {
+            font-size: 1.5rem;
+            margin-bottom: 2.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .test-btns {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .test-btn {
+            background: linear-gradient(135deg, #FF3366, #6C63FF);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.15s;
+            box-shadow: 0 2px 12px 0 #6C63FF22;
+        }
+        .test-btn:hover {
+            background: linear-gradient(135deg, #6C63FF, #FF3366);
+            transform: scale(1.07);
+        }
+        @media (max-width: 600px) {
+            .test-container { padding: 1.2rem 0.5rem; }
+            .test-btns { gap: 1rem; }
+            .test-btn { padding: 1rem 1.2rem; font-size: 1.05rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-question">Ты любишь Ultrakill?</div>
+        <div class="test-btns">
+            <button class="test-btn" onclick="window.location.href='screamer.html'">Да</button>
+            <button class="test-btn" onclick="window.location.href='profile.html'">Нет</button>
+        </div>
+    </div>
+</body>
+</html> 

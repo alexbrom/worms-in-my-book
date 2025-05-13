@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>О нас — Книжный червь</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1A1B1E 60%, #6C63FF 100%);
+            color: #fff;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .about-container {
+            background: rgba(26, 27, 30, 0.95);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(108, 99, 255, 0.15);
+            padding: 3rem 2.5rem 2.5rem 2.5rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .about-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #FF3366, #6C63FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2rem;
+        }
+        .authors {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: center;
+        }
+        .author-card {
+            background: rgba(34, 36, 40, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(108, 99, 255, 0.10);
+            padding: 1.5rem 1.2rem;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            margin-bottom: 1.5rem;
+        }
+        .author-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #00F5A0;
+            margin-bottom: 0.5rem;
+        }
+        .author-role {
+            font-size: 1.05rem;
+            color: #6C63FF;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+        }
+        .author-desc {
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+        @media (max-width: 600px) {
+            .about-container {
+                padding: 1.5rem 0.7rem 1.5rem 0.7rem;
+            }
+            .about-title {
+                font-size: 1.3rem;
+            }
+            .author {
+                font-size: 1.1rem;
+            }
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.7rem 2.2rem;
+            background: linear-gradient(90deg, #6C63FF, #00F5A0);
+            color: #fff;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 12px rgba(108, 99, 255, 0.15);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .back-link:hover {
+            background: linear-gradient(90deg, #FF3366, #6C63FF);
+            box-shadow: 0 4px 24px rgba(255, 51, 102, 0.15);
+        }
+    </style>
+</head>
+<body>
+    <div class="about-container">
+        <div class="about-title">О нас</div>
+        <div class="authors">
+            <div class="author-card">
+                <div class="author-name">Авдеев Нестор</div>
+                <div class="author-role">Frontend-разработчик</div>
+                <div class="author-desc">Ведущий разработчик проекта и создатель дизайна.</div>
+            </div>
+            <div class="author-card">
+                <div class="author-name">Ксения Белая</div>
+                <div class="author-role">Backend & Content</div>
+                <div class="author-desc">Структура данных, логика поиска, наполнение каталога, работа с базой новостей и скрытыми возможностями.</div>
+            </div>
+        </div>
+        <a href="index.html" class="back-link">Вернуться на главную</a>
+    </div>
+</body>
+</html> 
